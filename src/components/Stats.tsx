@@ -1,6 +1,6 @@
-import { stats } from "@/data/mock";
+import type { SiteCopy } from "@/types";
 
-export default function Stats() {
+export default function Stats({ stats }: { stats: SiteCopy["stats"] }) {
   return (
     <section className="bg-white pb-8">
       <div className="mx-auto max-w-7xl px-6">

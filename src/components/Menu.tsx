@@ -2,63 +2,62 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { menuCategories, menuItems } from "@/data/mock";
-import type { MenuCategoryId } from "@/types";
+import type { Locale, MenuCategoryId, SiteCopy } from "@/types";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
-type Filter = MenuCategoryId | "tat-ca";
+type Filter = MenuCategoryId | "all";
 
-export default function Menu() {
-  const [filter, setFilter] = useState<Filter>("tat-ca");
+export default function Menu({
+  copy,
+  locale,
+}: {
+  copy: SiteCopy["menu"];
+  locale: Locale;
+}) {
+  const [filter, setFilter] = useState<Filter>("all");
 
   const visibleItems =
-    filter === "tat-ca"
-      ? menuItems
-      : menuItems.filter((item) => item.category === filter);
+    filter === "all"
+      ? copy.items
+      : copy.items.filter((item) => item.category === filter);
+
+  const filters: { id: Filter; label: string }[] = [
+    { id: "all", label: copy.allLabel },
+    ...copy.categories.map((category) => ({
+      id: category.id as Filter,
+      label: category.label,
+    })),
+  ];
 
   return (
     <section id="menu" className="bg-white py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-700">
-            Thực đơn
+            {copy.eyebrow}
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-stone-900 sm:text-4xl">
-            Món quen của quán
+            {copy.title}
           </h2>
-          <p className="mt-4 text-base text-stone-600">
-            Giá đã bao gồm thuế. Mọi món đều có thể điều chỉnh độ ngọt và lượng
-            đá theo ý bạn.
-          </p>
+          <p className="mt-4 text-base text-stone-600">{copy.description}</p>
         </div>
 
         <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <button
-            type="button"
-            onClick={() => setFilter("tat-ca")}
-            className={cn(
-              "rounded-full px-5 py-2 text-sm font-medium transition",
-              filter === "tat-ca"
-                ? "bg-amber-700 text-white"
-                : "border border-stone-300 text-stone-600 hover:bg-stone-50"
-            )}
-          >
-            Tất cả
-          </button>
-          {menuCategories.map((category) => (
+          {filters.map((item) => (
             <button
-              key={category.id}
+              key={item.id}
               type="button"
-              onClick={() => setFilter(category.id)}
+              onClick={() => setFilter(item.id)}
+              aria-pressed={filter === item.id}
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-medium transition",
-                filter === category.id
+                filter === item.id
                   ? "bg-amber-700 text-white"
                   : "border border-stone-300 text-stone-600 hover:bg-stone-50"
               )}
             >
-              {category.label}
+              {item.label}
             </button>
           ))}
         </div>
@@ -69,14 +68,14 @@ export default function Menu() {
               <div className="relative aspect-4/3 overflow-hidden rounded-2xl border border-stone-200">
                 <Image
                   src={item.imageUrl}
-                  alt={item.name}
+                  alt={item.imageAlt}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover transition duration-500 group-hover:scale-105"
                 />
                 {item.popular && (
                   <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-amber-800">
-                    Bán chạy
+                    {copy.popularLabel}
                   </span>
                 )}
               </div>
@@ -86,7 +85,7 @@ export default function Menu() {
                   {item.name}
                 </h3>
                 <span className="shrink-0 text-sm font-semibold text-amber-800">
-                  {formatPrice(item.price)}
+                  {formatPrice(item.price, locale)}
                 </span>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-stone-600">

@@ -1,7 +1,13 @@
-import { brand, footerLinkGroups, socialLinks } from "@/data/mock";
 import { SocialIcon } from "@/components/icons";
+import type { SiteCopy } from "@/types";
 
-export default function Footer() {
+export default function Footer({
+  copy,
+  brand,
+}: {
+  copy: SiteCopy["footer"];
+  brand: SiteCopy["brand"];
+}) {
   return (
     <footer className="border-t border-stone-200 bg-stone-50">
       <div className="mx-auto max-w-7xl px-6 py-16">
@@ -16,10 +22,10 @@ export default function Footer() {
               </span>
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-stone-600">
-              {brand.tagline}. Rang thủ công từng mẻ nhỏ tại Quận 3, TP.HCM.
+              {copy.description}
             </p>
             <div className="mt-6 flex gap-4">
-              {socialLinks.map((social) => (
+              {copy.socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
@@ -32,7 +38,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {footerLinkGroups.map((group) => (
+          {copy.groups.map((group) => (
             <div key={group.title}>
               <h3 className="text-sm font-semibold text-stone-900">
                 {group.title}
@@ -54,7 +60,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-16 border-t border-stone-200 pt-8 text-center text-sm text-stone-500">
-          © {new Date().getFullYear()} {brand.name}. Bảo lưu mọi quyền.
+          © {new Date().getFullYear()} {brand.name}. {copy.copyright}
         </div>
       </div>
     </footer>

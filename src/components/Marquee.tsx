@@ -1,12 +1,10 @@
-import { marqueeItems } from "@/data/mock";
-
-export default function Marquee() {
+export default function Marquee({ items }: { items: string[] }) {
   return (
     <div className="overflow-hidden bg-amber-700 py-4">
       <div className="flex w-max animate-marquee">
         {[0, 1].map((copy) => (
           <div key={copy} aria-hidden={copy === 1} className="flex shrink-0">
-            {marqueeItems.map((item) => (
+            {items.map((item) => (
               <span
                 key={item}
                 className="flex items-center whitespace-nowrap px-8 font-display text-lg text-amber-50"

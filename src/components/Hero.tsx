@@ -1,8 +1,15 @@
+import { Fragment } from "react";
 import Image from "next/image";
-import { heroBadge, heroImage, stats } from "@/data/mock";
 import { ArrowRightIcon } from "@/components/icons";
+import type { SiteCopy } from "@/types";
 
-export default function Hero() {
+export default function Hero({
+  copy,
+  stats,
+}: {
+  copy: SiteCopy["hero"];
+  stats: SiteCopy["stats"];
+}) {
   return (
     <section className="relative overflow-hidden bg-stone-950">
       <div
@@ -18,19 +25,20 @@ export default function Hero() {
         <div className="grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_46%] lg:gap-0 lg:py-28">
           <div className="relative z-10 lg:pr-16">
             <span className="inline-flex items-center rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 text-xs font-medium text-amber-200">
-              {heroBadge}
+              {copy.badge}
             </span>
 
             <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Cà phê rang mộc,
-              <br />
-              pha bằng cả sự tử tế
+              {copy.titleLines.map((line, index) => (
+                <Fragment key={line}>
+                  {index > 0 && <br />}
+                  {line}
+                </Fragment>
+              ))}
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-300">
-              Mỗi mẻ hạt được rang trong ngày, pha bởi những barista nhớ tên
-              bạn. Một chỗ ngồi yên tĩnh giữa Quận 3 để bắt đầu buổi sáng cho
-              tử tế.
+              {copy.description}
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -38,14 +46,14 @@ export default function Hero() {
                 href="#menu"
                 className="inline-flex items-center gap-2 rounded-full bg-amber-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-amber-500"
               >
-                Xem thực đơn
-                <ArrowRightIcon className="h-4 w-4" />
+                {copy.menuCta}
+                <ArrowRightIcon className="h-4 w-4 shrink-0" />
               </a>
               <a
                 href="#visit"
                 className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
               >
-                Đặt bàn trước
+                {copy.visitCta}
               </a>
             </div>
 
@@ -65,8 +73,8 @@ export default function Hero() {
 
           <div className="relative aspect-4/5 overflow-hidden rounded-4xl border border-white/10 lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[46%] lg:rounded-none lg:rounded-l-[3rem] lg:border-0">
             <Image
-              src={heroImage.src}
-              alt={heroImage.alt}
+              src={copy.image.src}
+              alt={copy.image.alt}
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 46vw"
@@ -79,10 +87,10 @@ export default function Hero() {
 
             <div className="absolute bottom-5 left-5 rounded-2xl bg-white/95 px-5 py-4 shadow-lg backdrop-blur">
               <p className="font-display text-lg font-semibold text-stone-900">
-                Mở cửa 07:00
+                {copy.openingTitle}
               </p>
               <p className="mt-0.5 text-xs text-stone-500">
-                Mẻ rang đầu tiên vừa ra lò
+                {copy.openingDescription}
               </p>
             </div>
           </div>
